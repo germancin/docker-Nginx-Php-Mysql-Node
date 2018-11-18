@@ -4,7 +4,7 @@
     "description": "Node API.",
     "main": "server.js",
     "scripts": {
-      "start": "nodemon /var/www/server.js"
+      "start": "nodemon /var/www/docker/node/server.js"
     },
     "repository": {
       "type": "git"

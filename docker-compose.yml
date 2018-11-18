@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+  nginx:
+    build: ./docker/nginx/
+    container_name: nginx-container
+    ports:
+      - 80:80
+    links:
+      - php
+    volumes_from:
+      - app-data
+
+  php:
+    build: ./docker/php/
+    container_name: php-container
+    expose:
+      - 9000
+    links: 
+      - mysql
+      - node
+    volumes_from:
+      - app-data
+
+  mysql:
+    image: mysql:5.7
+    ports: 
+      - "3306:3306"
+    container_name: mysql-container
+    volumes_from:
+      - mysql-data
+    environment:
+      MYSQL_ROOT_PASSWORD: homestead
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: homestead
+
+  node:
+    build: ./docker/node/
+    container_name: node-container
+    ports:
+      - 49160:3020
+    volumes_from:
+      - app-data
+
+  mysql-data:
+    image: mysql:5.7
+    container_name: mysql-data-container
+    volumes:
+      - /var/lib/mysql
+    command: "true"
+
+  app-data:
+    build: ./docker/php/
+    container_name: app-data-container
+    volumes:
+      - ./:/var/www/
+      - ./public/:/var/www/html/
+    command: "true"
